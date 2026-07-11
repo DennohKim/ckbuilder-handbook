@@ -89,4 +89,4 @@ Reimbursement is pro-rata and tied directly to this log. Reports must be:
 
 ## This Repo
 - [`my-first-ckb-project/`](./my-first-ckb-project) — first hands-on project (contracts, scripts, tests)
-- [`reports/`](./reports) — weekly dev-log reports
+- [`reports/`](./reports) — weekly dev-log reports, one folder per week (`reports/week-NN/ckb_weekly_report_wN.md`)
