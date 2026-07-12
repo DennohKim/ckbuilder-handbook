@@ -1,20 +1,47 @@
-# Week 01 — Dev Log
+## Builder Track Weekly Report — Week 1
 
-**Builder:** Dennis Kimathi
-**Week of:** <!-- YYYY-MM-DD to YYYY-MM-DD -->
-**Hours this week:** <!-- e.g. 5 -->
+**Name:** Dennis Kimathi
+**Week Ending:** 07-12-2026
 
-## What I studied / built
-<!-- Docs read, exercises completed, code written -->
+### Courses Completed
 
-## What I learned
-<!-- Key concepts, aha moments -->
+- Completed the first **two courses** of the [CKB Academy](https://academy.ckb.dev/):
+  - **[Basic Theory](https://academy.ckb.dev/courses/basic-theory)** — CKB's conceptual foundations:
+    - The **Cell Model** and the structure of a Cell (capacity, lock, type, data)
+    - Structure of a **transaction** (inputs, outputs, witnesses, cell deps)
+    - **Scripts** (Lock vs. Type) and the **CKB-VM**
+  - **[Basic Operation](https://academy.ckb.dev/courses/basic-operation)** — hands-on account and transaction flow:
+    - Generated an account/address, funded it from the **testnet faucet**, checked balance
+    - Built and sent a **CKB transfer**: <!-- View on Explorer: https://testnet.explorer.nervos.org/transaction/0x... -->
+- Read the official docs **[How CKB Works](https://docs.nervos.org/docs/getting-started/how-ckb-works)** to cross-check the Academy against the source of truth
+- Began **Rust** via [rarecode.ai](https://rarecode.ai/) to prepare for the Rust SDK and on-chain Script work
 
-## What was interesting or challenging
-<!-- Blockers, surprises, questions -->
+### Key Learnings
 
-## Evidence
-<!-- Screenshots, links to commits/PRs, tx hashes -->
+- Developed a solid understanding of CKB's **UTXO-like Cell Model** (state = the set of live Cells), including:
+  - How state changes by **consuming live Cells and creating new ones** — nothing is edited in place
+  - The roles of **Lock Scripts** (ownership / who can spend) vs. **Type Scripts** (state-transition rules)
+  - **CKBytes as storage capacity**: ~61 CKB minimum per basic Cell; holding data means locking up capacity (state rent by lockup)
+  - The **CKB-VM** as a real **RISC-V** machine running Script binaries, metered in **cycles** (0 = pass, non-zero = fail)
+- **Coming from EVM — UTXO/Cell model vs. account model:**
+  - **Ethereum uses an account model** — every account has a balance/storage that contracts **mutate in place** (`balance -= x`); state is one big global, mutable map
+  - **CKB uses a UTXO-like Cell model** — there are no balances to edit. Your "balance" is a set of **live Cells** you own; a transfer **consumes** input Cells and **creates** new output Cells (recipient + change), just like Bitcoin UTXOs
+  - Consequences of the model: transactions are **explicit about inputs/outputs**, Cells are independent so validation is **parallel-friendly**, and there's **no shared mutable state → no reentrancy**
+- **Other EVM → CKB differences that reframed my thinking:**
+  - CKB is a **verification model** (I compute the new state off-chain; Scripts only validate it) vs. EVM's **computation model** (the chain runs code to compute state)
+  - **No accounts / no `msg.sender`** — ownership is "can you satisfy this Lock Script?"
+  - **No runtime cross-contract calls** — composition happens by constructing transactions that reference multiple Cells/Scripts
+  - Storage is **priced** via locked capacity instead of being effectively free forever (no state bloat), and **reentrancy doesn't exist**
+- Started **Rust** fundamentals (variables/mutability, functions, basic data types) to work toward writing Scripts with `ckb-std`
 
-## Next week
-<!-- Plan -->
+### Practical Progress
+
+- **Ran a CKB node with Docker** ([guide](https://docs.nervos.org/docs/node/run-node-docker)) — initialized with a persistent volume at `/var/lib/ckb`, edited config, and watched it sync
+- Completed the **Basic Operation** transaction flow end-to-end (address → faucet → transfer → balance check)
+- Began working through **Rust exercises** on rarecode.ai as a foundation for on-chain development
+
+### Environment
+
+- CKB node running in **Docker** (persistent volume, config editable on host)
+- **Rust + Cargo** installed; started Rust coursework
+- `my-first-ckb-project/` scaffolded in the handbook repo for upcoming hands-on work
