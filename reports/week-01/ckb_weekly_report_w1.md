@@ -12,7 +12,7 @@
     - **Scripts** (Lock vs. Type) and the **CKB-VM**
   - **[Basic Operation](https://academy.ckb.dev/courses/basic-operation)** — hands-on account and transaction flow:
     - Generated an account/address, funded it from the **testnet faucet**, checked balance
-    - Built and sent a **CKB transfer**: <!-- View on Explorer: https://testnet.explorer.nervos.org/transaction/0x... -->
+    - Walked through building and sending a **CKB transfer**
 - Read the official docs **[How CKB Works](https://docs.nervos.org/docs/getting-started/how-ckb-works)** to cross-check the Academy against the source of truth
 - Began **Rust** via [rarecode.ai](https://rarecode.ai/) to prepare for the Rust SDK and on-chain Script work
 
@@ -37,11 +37,14 @@
 ### Practical Progress
 
 - **Ran a CKB node with Docker** ([guide](https://docs.nervos.org/docs/node/run-node-docker)) — initialized with a persistent volume at `/var/lib/ckb`, edited config, and watched it sync
-- Completed the **Basic Operation** transaction flow end-to-end (address → faucet → transfer → balance check)
+- **Sent a real transaction with `ckb-cli`** on a local **OffCKB devnet**, following the [Developer Training Course](https://nervos.gitbook.io/developer-training-course/transactions/sending-a-transaction):
+  - Started the devnet (`offckb node`) and transferred **1000 CKB** between prefunded accounts via `ckb-cli wallet transfer`
+  - Tx hash: `0x901d8a96f096c9f1091e7de58d66c51d9ad976b9cc65c3ef5b68846ae956c197` (status: **committed**, block `0x918455691bcdb131de63015aee2c3e78dfb3b50438bcc78064d158174c30ee64`)
 - Began working through **Rust exercises** on rarecode.ai as a foundation for on-chain development
 
 ### Environment
 
 - CKB node running in **Docker** (persistent volume, config editable on host)
+- **OffCKB** local devnet + **`ckb-cli`** working (used to send the transaction above)
 - **Rust + Cargo** installed; started Rust coursework
 - `my-first-ckb-project/` scaffolded in the handbook repo for upcoming hands-on work
