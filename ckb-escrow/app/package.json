@@ -1,0 +1,28 @@
+{
+  "name": "ckb-escrow-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "sync": "node scripts/sync-config.mjs",
+    "dev": "npm run sync && vite",
+    "build": "npm run sync && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "npm run sync && vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ckb-ccc/connector-react": "^1.1.7",
+    "@ckb-ccc/core": "^1.18.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^6.0.0",
+    "typescript": "^5.9.0",
+    "vite": "^8.1.0",
+    "vitest": "^4.1.10"
+  }
+}
