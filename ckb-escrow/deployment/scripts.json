@@ -1,13 +1,13 @@
 {
   "devnet": {
     "escrow": {
-      "codeHash": "0x81d2fee6790006229e1d7b7f2f7302c12d55b48803fa132b42922078541d6b76",
+      "codeHash": "0xa141eff3dcbeb404516858c8d1a707b0aad7c2d292dbdbbc47690b516a109c05",
       "hashType": "data2",
       "cellDeps": [
         {
           "cellDep": {
             "outPoint": {
-              "txHash": "0x3a2e810a7fdee0d4fe9ec440d616ee91af6ae8dc5e9fbc4b76ec0adba7002497",
+              "txHash": "0x82e95a4ffbb12fac37e4c20d49c1d0e1b310c3f7ecbc22569cd457046631c195",
               "index": 0
             },
             "depType": "code"

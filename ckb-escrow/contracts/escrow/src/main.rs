@@ -118,8 +118,11 @@ fn run() -> Result<(), Error> {
 
     // Path 3 — timeout refund: the buyer reclaims once every escrow input has
     // committed a `since` at or beyond the deadline, which consensus only
-    // permits once the deadline has actually elapsed.
-    if buyer_present && escrow_inputs > 0 && all_escrow_inputs_matured {
+    // permits once the deadline has actually elapsed. A zero timeout means no
+    // deadline was agreed, which disables this path entirely — without this
+    // guard every `since` trivially clears a zero deadline and the buyer could
+    // drain the escrow unilaterally at any time.
+    if timeout != 0 && buyer_present && escrow_inputs > 0 && all_escrow_inputs_matured {
         return Ok(());
     }
 
@@ -128,12 +131,9 @@ fn run() -> Result<(), Error> {
 
 /// `since` packs an 8-bit flag prefix (metric type + relative/absolute) over a
 /// 56-bit value. A committed `since` clears the deadline only when its flags
-/// match and its value is at or beyond the deadline's. A zero timeout disables
-/// the timeout path.
+/// match and its value is at or beyond the deadline's. Callers must reject a
+/// zero timeout before reaching here — every `since` clears a zero deadline.
 fn since_reached(input_since: u64, timeout: u64) -> bool {
-    if timeout == 0 {
-        return true;
-    }
     if (input_since & !SINCE_VALUE_MASK) != (timeout & !SINCE_VALUE_MASK) {
         return false;
     }

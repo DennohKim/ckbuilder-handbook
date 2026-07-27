@@ -1,0 +1,12 @@
+{
+  "cell_recipes": [
+    {
+      "name": "escrow",
+      "tx_hash": "0x82e95a4ffbb12fac37e4c20d49c1d0e1b310c3f7ecbc22569cd457046631c195",
+      "index": 0,
+      "occupied_capacity": 3936800000000,
+      "data_hash": "0xa141eff3dcbeb404516858c8d1a707b0aad7c2d292dbdbbc47690b516a109c05"
+    }
+  ],
+  "dep_group_recipes": []
+}

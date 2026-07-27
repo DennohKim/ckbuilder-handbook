@@ -170,6 +170,17 @@ fn buyer_alone_before_timeout_fails() {
 }
 
 #[test]
+fn buyer_alone_with_zero_timeout_fails() {
+    // #given an escrow whose timeout is zero, meaning no refund deadline was set
+    let mut e = setup(0);
+    let buyer = e.buyer_lock.clone();
+    // #when the buyer alone tries to spend it
+    let tx = spend(&mut e, &[&buyer], 0);
+    // #then the escrow rejects the spend rather than treating the deadline as met
+    assert!(e.context.verify_tx(&tx, MAX_CYCLES).is_err());
+}
+
+#[test]
 fn arbiter_alone_fails() {
     // #given only the arbiter consents
     let mut e = setup(TIMEOUT);

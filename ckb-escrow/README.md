@@ -48,13 +48,15 @@ make clippy         # lint
 ```
 
 The tests in [`tests/src/tests.rs`](tests/src/tests.rs) cover every unlock path
-plus the rejection cases (buyer alone before the timeout, arbiter alone, an
-unrelated party).
+plus the rejection cases (buyer alone before the timeout, buyer alone when no
+deadline was set, arbiter alone, an unrelated party).
 
 ## Layout
 
 - `contracts/escrow/src/main.rs` — the escrow lock script
 - `tests/src/tests.rs` — CKB-VM integration tests
+- [`app/`](app) — React + CCC front end that funds and settles escrows on a devnet
+- [`demo/`](demo) — headless fund → release script, the first end-to-end driver
 
 *Bootstrapped with [ckb-script-templates].*
 

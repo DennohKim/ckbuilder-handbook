@@ -1,20 +1,14 @@
 const ccc = require("@ckb-ccc/core");
+const scripts = require("../deployment/scripts.json");
 
 const RPC = "http://127.0.0.1:8114";
 
-// Deployed escrow script on the OffCKB devnet (see ../deployment/scripts.json).
+// Deployed escrow script on the OffCKB devnet, read from the deployment record
+// so a redeploy (which changes the code hash) doesn't leave this stale.
 const ESCROW = {
-  codeHash:
-    "0x81d2fee6790006229e1d7b7f2f7302c12d55b48803fa132b42922078541d6b76",
-  hashType: "data2",
-  dep: {
-    outPoint: {
-      txHash:
-        "0x3a2e810a7fdee0d4fe9ec440d616ee91af6ae8dc5e9fbc4b76ec0adba7002497",
-      index: 0,
-    },
-    depType: "code",
-  },
+  codeHash: scripts.devnet.escrow.codeHash,
+  hashType: scripts.devnet.escrow.hashType,
+  dep: scripts.devnet.escrow.cellDeps[0].cellDep,
 };
 
 // secp256k1 sighash dep group on the OffCKB devnet genesis.
@@ -79,7 +73,7 @@ async function main() {
     strip(buyerLock.hash()) +
     strip(sellerLock.hash()) +
     strip(arbiterLock.hash()) +
-    "0000000000000000"; // timeout = 0 (timeout path disabled; mutual release)
+    "0000000000000000"; // timeout = 0 disables the refund path: release must be mutual or arbitrated
   const escrowLock = ccc.Script.from({
     codeHash: ESCROW.codeHash,
     hashType: ESCROW.hashType,
