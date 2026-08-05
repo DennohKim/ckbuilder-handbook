@@ -14,6 +14,21 @@
           }
         }
       ]
+    },
+    "udt": {
+      "codeHash": "0x2abe41c98614ff98074eaa9ba40bab9d8f45d73194032a429334e2ac5bd01659",
+      "hashType": "data2",
+      "cellDeps": [
+        {
+          "cellDep": {
+            "outPoint": {
+              "txHash": "0xc3285ffa2d065c4d9f785d6d8b9633aae4639e850134030bc2c03f9f73779084",
+              "index": 0
+            },
+            "depType": "code"
+          }
+        }
+      ]
     }
   },
   "testnet": {},

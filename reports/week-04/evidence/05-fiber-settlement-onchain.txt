@@ -1,0 +1,27 @@
+=== Fiber dev chain — force-close settlement, re-queried ===
+chain genesis hash (the `chain_hash` both nodes report):
+   0xeac93bcfaad487169f94615169b26f8363de2a70ade4dbb6c602859b43109f32
+tip block: 546
+
+latest commitment tx of the COOPERATIVE channel (never broadcast):
+   0x65d8904fb8a07b37f1b315db766b64386a0ab2b713683f7acdc7d2ebe6dd1c10
+   status = unknown   <-- not on chain, by design
+
+force close: 0xe867d156f0a89ac8bc976bac272ea50bba92c8239f20ea87de32eaa2c34830d8
+   status=committed block=269
+   in[0]  since=0x0  prev=0xca0e0053f49cafaf04a7bd6516e495b36f93078798a7b100da22fa6f9c99b965
+   out[0] 599.0000 CKB  lock.code_hash=0xcedf1acb430849d3621a4b88f73bbdf15cbd80a410532bb8fcb382fb427e5ac7
+
+watchtower settlement: 0xf9ba1f3bcf98971d9fb9fc9136d84db9a2336c86977c868f5754f20a3b8ba945
+   status=committed block=297
+   in[0]  since=0xa000010000000001  prev=0xe867d156f0a89ac8bc976bac272ea50bba92c8239f20ea87de32eaa2c34830d8
+   in[1]  since=0x0  prev=0x9bb324f160f3d6f961870c5318d79e8f65c9ba8a32a4635e69b01a8106be1e07
+   out[0] 101.0000 CKB  lock.code_hash=0xcedf1acb430849d3621a4b88f73bbdf15cbd80a410532bb8fcb382fb427e5ac7
+   out[1] 1000000498.0000 CKB  lock.code_hash=0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
+
+=== the delay the settlement had to wait out ===
+  CommitmentLock args[20..28] = 0xa000010000000001
+    relative (bit 63)      : True
+    metric flag (bits 62-61): 1  (1 = epoch)
+    EpochNumberWithFraction: number=1 index=0 length=1
+  settlement input since    = 0xa000010000000001  <-- identical

@@ -1,0 +1,21 @@
+=== OffCKB devnet — transactions cited in the week-04 report ===
+tip block: 1635
+
+escrow deploy (week 3)     committed  block=1055  0x82e95a4ffbb12fac37e4c20d49c1d0e1b310c3f7ecbc22569cd457046631c195
+udt deploy                 committed  block=1399  0xc3285ffa2d065c4d9f785d6d8b9633aae4639e850134030bc2c03f9f73779084
+udt mint  (owner mode)     committed  block=1424  0xcd9c9842290f5d78b818cac5a538661a07fad0193bbba3e5e3074fb6c42585de
+udt transfer (no owner)    committed  block=1427  0x1d530e971c194376255ee4a3ac4f0a4f950a4b62b9a9b3fbe35f5433d9b7d7bd
+
+=== token balances re-read from chain ===
+  receiver  amount=  400000  type.code_hash=0x2abe41c98614ff98074eaa9ba40bab9d8f45d73194032a429334e2ac5bd01659
+  holder    amount=  600000  type.code_hash=0x2abe41c98614ff98074eaa9ba40bab9d8f45d73194032a429334e2ac5bd01659
+
+=== deployed udt code hash matches deployment/scripts.json ===
+  scripts.json udt codeHash: 0x2abe41c98614ff98074eaa9ba40bab9d8f45d73194032a429334e2ac5bd01659
+  scripts.json escrow codeHash: 0xa141eff3dcbeb404516858c8d1a707b0aad7c2d292dbdbbc47690b516a109c05
+
+=== token identity recomputed from the on-chain cell ===
+  type.codeHash   : 0x2abe41c98614ff98074eaa9ba40bab9d8f45d73194032a429334e2ac5bd01659
+  type.hashType   : data2
+  type.args       : 0x7de82d61a7eb2ec82b0dc653e558ba120efcbfbb44dac87c12972d05bf250653 (owner lock hash)
+  type script hash: 0x96be75bbc1d9c89bde4e18984f4e7f1cb40a5c879527f2753944e07b06bc14f5

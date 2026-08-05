@@ -1,0 +1,43 @@
+=== cargo test (17 passed, 1 ignored) ===
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test tests::dump_unlock_paths_for_debugger ... ignored
+test tests::buyer_alone_with_zero_timeout_fails ... ok
+test tests::mutual_release_succeeds ... ok
+test tests::stranger_only_fails ... ok
+test tests::arbiter_alone_fails ... ok
+test udt_tests::burning_succeeds ... ok
+test tests::buyer_alone_before_timeout_fails ... ok
+test tests::timeout_refund_succeeds ... ok
+test udt_tests::amount_data_shorter_than_16_bytes_fails ... ok
+test tests::arbiter_with_buyer_succeeds ... ok
+test tests::arbiter_with_seller_succeeds ... ok
+test udt_tests::inflating_without_owner_fails ... ok
+test udt_tests::minting_without_owner_fails ... ok
+test udt_tests::merging_inputs_succeeds ... ok
+test udt_tests::owner_can_mint_from_nothing ... ok
+test udt_tests::transfer_conserving_amount_succeeds ... ok
+test tests::unlock_paths_stay_within_cycle_budget ... ok
+test udt_tests::valid_paths_stay_within_cycle_budget ... ok
+test result: ok. 17 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.03s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+=== cycle counts from CKB-VM (verify_tx, whole transaction) ===
+test tests::unlock_paths_stay_within_cycle_budget ... escrow cycles — mutual release: 32138
+escrow cycles — arbitrated: 32144
+escrow cycles — timeout refund: 28481
+test udt_tests::valid_paths_stay_within_cycle_budget ... udt cycles — owner mint: 24270
+udt cycles — 1-in 2-out transfer: 27706
+
+=== ckb-debugger (single lock script group) ===
+mutual-release   All cycles: 27932(27.3K)
+arbitrated       All cycles: 27938(27.3K)
+timeout-refund   All cycles: 26382(25.8K)
+
+=== clippy / fmt ===
+cargo fmt --check: clean
+clippy warnings: 0

@@ -89,5 +89,5 @@ Reimbursement is pro-rata and tied directly to this log. Reports must be:
 
 ## This Repo
 - [`my-first-ckb-project/`](./my-first-ckb-project) — first hands-on project (contracts, scripts, tests)
-- [`ckb-escrow/`](./ckb-escrow) — Rust escrow lock script, plus a React + CCC front end (`app/`) that drives it on a devnet
+- [`ckb-escrow/`](./ckb-escrow) — Rust scripts (`escrow` lock, minimal `udt` sUDT-style type script), plus a React + CCC front end (`app/`) and Node demos (`demo/`) that drive them on a devnet
 - [`reports/`](./reports) — weekly dev-log reports, one folder per week (`reports/week-NN/ckb_weekly_report_wN.md`)

@@ -1,0 +1,78 @@
+=== Fiber two-node channel lifecycle (fnn v0.8.1, ckb_dev) ===
+node1 pubkey : 02a64b8993f33b2ebd37a4de1c9441f491291a4e779da8e519bcfb7c1f3f56c9c0
+node2 pubkey : 02bcbd0e0d811d13363af1e5998f56e74e6aab8a7aa44005e1ce7d696a4d3f10f6
+node2 address: /ip4/127.0.0.1/tcp/8345/p2p/QmSRcPqUn4aQrKHXyCDjGn2qBVf43tWBDS2Wj9QDUZXtZp
+
+--- 1. connect peer ---
+node1 peers_count: 0x1
+
+--- 2. open channel (node1 funds 500 CKB) ---
+open_channel -> {"jsonrpc":"2.0","id":42,"result":{"temporary_channel_id":"0x4ee5609459c1d78aec52c57d0dc64c15ca2f7dad7cc5bcc4e44ee3165b17ece4"}}
+temporary_channel_id: 0x4ee5609459c1d78aec52c57d0dc64c15ca2f7dad7cc5bcc4e44ee3165b17ece4
+
+--- 3. mine until the funding transaction confirms ---
+channel_id      : 0x748ea116eb5191938e6ad0f1ef2c6abb0ebe9ee707e342fe7856422574935bf7
+channel_outpoint: 0xe61183a1942b6a44255aa829685c2424c5dd4d41ecd850d0f89464bed1ebea6900000000   (funding tx hash ++ output index)
+state           : ChannelReady
+
+--- 4. funding transaction on chain ---
+  tx_hash : 0xe61183a1942b6a44255aa829685c2424c5dd4d41ecd850d0f89464bed1ebea69
+  status  : committed
+  inputs  : 2  outputs: 3
+  out[0] capacity=599.00 CKB lock.code_hash=0xf02ae41c20f3baeda929b5fd87703978e48aed9a6ac6d993ec8a375f941da021
+  out[1] capacity=999999500.00 CKB lock.code_hash=0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
+  out[2] capacity=999999901.00 CKB lock.code_hash=0x9bd7e06f3ecf4be0f2fcd2188b23f1b9fcc88e5d4b65a8637b17723bbda3cce8
+
+--- 5. balances before payment ---
+node1:   local=401.0000 CKB  remote=0.0000 CKB
+node2:   local=0.0000 CKB  remote=401.0000 CKB
+
+--- 6. node2 issues an invoice for 1 CKB, node1 pays it off-chain ---
+invoice   : fibd1000000001peymvjde5cjgfw0pnm6vhz7zqmzws9edcj73vfxz8an9txr2c0sm8t0ykxlw5l0xetwqn3n2a066eehluqantms6s924txnmxflkk9uakkxg88p0vcaj8f60zusewwnc9sq202meapmxgsdp5rcy7eawhafyue8ppftux6r854gz033xmy2gytev3q6nz4kyzqjv9khgpxjtldt99638kvk35twqavp6nkpcq8chvkc8tr6dyjlw5ymkp5qq6ks97a4e98ula5wpsaqly2k2vhjzsekzpha3gt9chp2c03vlmln9eusm6c9zp6shvpnd0jcqe0uwd2htpp5xf7k9c09xlczt6500dqp48pr3z
+payment_hash: 0xfc8b64001c5fdd0f2f40fb67dae4a865a2c5bd17836676d6d5b58b7917e33717
+send_payment -> {"jsonrpc":"2.0","id":42,"result":{"payment_hash":"0xfc8b64001c5fdd0f2f40fb67dae4a865a2c5bd17836676d6d5b58b7917e33717","status":"Created","created_at":"0x19fcfb72a56","last_updated_at":"0x19fcfb72a56","failed_error":null,"fee":"0x0","custom_records":null}}
+final payment status: Success
+
+--- 7. balances after payment (no on-chain transaction) ---
+node1:   local=400.0000 CKB  remote=1.0000 CKB
+node2:   local=1.0000 CKB  remote=400.0000 CKB
+tip before close: 0xf4
+
+--- 8. cooperative close from node1 ---
+shutdown_channel -> {"jsonrpc":"2.0","id":42,"result":null}
+final channel state: Closed
+{
+    "jsonrpc": "2.0",
+    "id": 42,
+    "result": {
+        "channels": [
+            {
+                "channel_id": "0x748ea116eb5191938e6ad0f1ef2c6abb0ebe9ee707e342fe7856422574935bf7",
+                "is_public": true,
+                "is_acceptor": false,
+                "is_one_way": false,
+                "channel_outpoint": "0xe61183a1942b6a44255aa829685c2424c5dd4d41ecd850d0f89464bed1ebea6900000000",
+                "pubkey": "02bcbd0e0d811d13363af1e5998f56e74e6aab8a7aa44005e1ce7d696a4d3f10f6",
+                "funding_udt_type_script": null,
+                "state": {
+                    "state_name": "Closed",
+                    "state_flags": "COOPERATIVE"
+                },
+                "local_balance": "0x9502f9000",
+                "offered_tlc_balance": "0x0",
+                "remote_balance": "0x5f5e100",
+                "received_tlc_balance": "0x0",
+                "pending_tlcs": [],
+                "latest_commitment_transaction_hash": "0x65d8904fb8a07b37f1b315db766b64386a0ab2b713683f7acdc7d2ebe6dd1c10",
+                "created_at": "0x19fcfb5c9f8",
+                "enabled": true,
+                "tlc_expiry_delta": "0xdbba00",
+                "tlc_fee_proportional_millionths": "0x3e8",
+                "shutdown_transaction_hash": "0xa3c68e22e6c129c8a709f2bb0d249c25a9ec0b1af9de8ea4046325bb8867d4be",
+                "failure_detail": null
+            }
+        ]
+    }
+}
+
+=== evidence written to /private/tmp/claude-501/-Users-chizaa-Documents-projects-ckb/0bfa51bf-c626-4f2f-a6d3-f9193b3c9fe7/scratchpad/fiber-evidence.txt ===

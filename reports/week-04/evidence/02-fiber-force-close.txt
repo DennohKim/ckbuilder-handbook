@@ -1,0 +1,20 @@
+=== Fiber FORCE close (commitment transaction hits the chain) ===
+
+--- open a second channel (500 CKB) ---
+channel_id      : 0x503724dac3f0e27eb75d6137196abbc41ab173ffa9db7330d92418ae19abfd85
+channel_outpoint: 0xca0e0053f49cafaf04a7bd6516e495b36f93078798a7b100da22fa6f9c99b96500000000
+
+--- move 2 CKB across it ---
+payment status: Success
+latest_commitment_transaction_hash (still off-chain): 0x940acacef4b2be388e504f5d1a8e463c9d080544cab1e46958c4899766e3a42a
+
+--- disconnect the peer, then force close ---
+final: Closed UNCOOPERATIVE_LOCAL|WAITING_ONCHAIN_SETTLEMENT 0xe867d156f0a89ac8bc976bac272ea50bba92c8239f20ea87de32eaa2c34830d8
+
+--- the force-close transaction on chain ---
+  tx_hash: 0xe867d156f0a89ac8bc976bac272ea50bba92c8239f20ea87de32eaa2c34830d8  status: committed
+  in[0]  since=0x0  prev=0xca0e0053f49cafaf04a7bd6516e495b36f93078798a7b100da22fa6f9c99b965
+  out[0] 599.0000 CKB lock.code_hash=0xcedf1acb430849d3621a4b88f73bbdf15cbd80a410532bb8fcb382fb427e5ac7
+         lock.args=0x25d321231b436b0f8c7d4b47d17bdfb762c14cb801000000000100a00000000000000003968f32faf25eacab943731935bb38f39c6b76c7e00
+
+=== written to /private/tmp/claude-501/-Users-chizaa-Documents-projects-ckb/0bfa51bf-c626-4f2f-a6d3-f9193b3c9fe7/scratchpad/fiber-force-evidence.txt ===

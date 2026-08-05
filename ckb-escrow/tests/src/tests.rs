@@ -18,6 +18,9 @@ fn u64_le(value: u64) -> Uint64 {
     value.pack()
 }
 
+/// Builds one of the escrow's unlock paths against a fresh fixture.
+type PathBuilder = fn(&mut Escrow) -> TransactionView;
+
 struct Escrow {
     context: Context,
     escrow_lock: Script,
@@ -189,6 +192,82 @@ fn arbiter_alone_fails() {
     let tx = spend(&mut e, &[&arbiter], 0);
     // #then the escrow rejects the spend
     assert!(e.context.verify_tx(&tx, MAX_CYCLES).is_err());
+}
+
+/// The escrow's three unlock paths all walk the input list once, so they should
+/// cost roughly the same and stay far below the block cycle limit. Pinning a
+/// budget here turns an accidental blow-up into a failing test instead of a
+/// transaction that is too expensive to relay.
+#[test]
+fn unlock_paths_stay_within_cycle_budget() {
+    const BUDGET: u64 = 2_000_000;
+
+    let paths: [(&str, PathBuilder); 3] = [
+        ("mutual release", |e| {
+            let (buyer, seller) = (e.buyer_lock.clone(), e.seller_lock.clone());
+            spend(e, &[&buyer, &seller], 0)
+        }),
+        ("arbitrated", |e| {
+            let (arbiter, seller) = (e.arbiter_lock.clone(), e.seller_lock.clone());
+            spend(e, &[&arbiter, &seller], 0)
+        }),
+        ("timeout refund", |e| {
+            let buyer = e.buyer_lock.clone();
+            spend(e, &[&buyer], TIMEOUT)
+        }),
+    ];
+
+    for (name, build) in paths {
+        let mut e = setup(TIMEOUT);
+        let tx = build(&mut e);
+        let cycles = e.context.verify_tx(&tx, MAX_CYCLES).expect(name);
+        println!("escrow cycles — {name}: {cycles}");
+        assert!(
+            cycles < BUDGET,
+            "{name} used {cycles} cycles, over {BUDGET}"
+        );
+    }
+}
+
+/// Writes each unlock path to `target/debug-txs/` in ckb-debugger's mock
+/// transaction format. Ignored by default because it produces files rather than
+/// asserting anything; run it when you want to step through a path:
+///
+/// ```text
+/// cargo test --package tests dump_unlock_paths -- --ignored
+/// ckb-debugger --tx-file target/debug-txs/mutual-release.json \
+///   --cell-index 0 --cell-type input --script-group-type lock
+/// ```
+#[test]
+#[ignore]
+fn dump_unlock_paths_for_debugger() {
+    let paths: [(&str, PathBuilder); 3] = [
+        ("mutual-release", |e| {
+            let (buyer, seller) = (e.buyer_lock.clone(), e.seller_lock.clone());
+            spend(e, &[&buyer, &seller], 0)
+        }),
+        ("arbitrated", |e| {
+            let (arbiter, seller) = (e.arbiter_lock.clone(), e.seller_lock.clone());
+            spend(e, &[&arbiter, &seller], 0)
+        }),
+        ("timeout-refund", |e| {
+            let buyer = e.buyer_lock.clone();
+            spend(e, &[&buyer], TIMEOUT)
+        }),
+    ];
+
+    let dir = std::path::Path::new("../target/debug-txs");
+    std::fs::create_dir_all(dir).expect("create dump dir");
+
+    for (name, build) in paths {
+        let mut e = setup(TIMEOUT);
+        let tx = build(&mut e);
+        let mock = e.context.dump_tx(&tx).expect("dump tx");
+        let json = serde_json::to_string_pretty(&mock).expect("serialize");
+        let path = dir.join(format!("{name}.json"));
+        std::fs::write(&path, json).expect("write dump");
+        println!("wrote {}", path.display());
+    }
 }
 
 #[test]
